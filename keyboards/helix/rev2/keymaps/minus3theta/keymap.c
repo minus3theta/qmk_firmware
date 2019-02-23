@@ -94,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL, \
       KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                      KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSLS, \
       KC_LCTL, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                      KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_MINUS, \
-      KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_MHEN, KC_DEL,  KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC , \
+      KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    EISU,    KC_DEL,  KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC , \
       KC_ESC,  KC_QUOT, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_LCTL, KC_BSPC, KC_ENT,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
       ),
 
@@ -429,12 +429,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case EISU:
       if (record->event.pressed) {
         if(keymap_config.swap_lalt_lgui==false){
-          register_code(KC_LANG2);
+          register_code(KC_MHEN);
         }else{
           SEND_STRING(SS_LALT("`"));
         }
-      } else {
-        unregister_code(KC_LANG2);
+        unregister_code(KC_MHEN);
       }
       return false;
       break;
