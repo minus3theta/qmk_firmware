@@ -43,7 +43,9 @@ enum custom_keycodes {
   BACKLIT,
   EISU,
   KANA,
-  RGBRST
+  RGBRST,
+  MAC,
+  WIN
 };
 
 enum macro_keycodes {
@@ -177,7 +179,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_ADJUST] =  LAYOUT( \
       KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12, \
       _______, RESET,   RGBRST,  _______, _______, _______,                   _______, _______, _______, _______, _______, KC_DEL, \
-      _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM,                   AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
+      _______, _______, _______, AU_ON,   AU_OFF,  MAC,                       WIN,     QWERTY,  COLEMAK, DVORAK,  _______, _______, \
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, \
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD \
       )
@@ -314,6 +316,7 @@ float music_scale[][2]     = SONG(MUSIC_SCALE_SOUND);
 // define variables for reactive RGB
 bool TOG_STATUS = false;
 int RGB_current_mode;
+bool WINDOWS_MODE = false;
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
@@ -428,7 +431,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case EISU:
       if (record->event.pressed) {
-        if(keymap_config.swap_lalt_lgui==false){
+        if(! WINDOWS_MODE){
           register_code(KC_MHEN);
         }else{
           SEND_STRING(SS_LALT("`"));
@@ -458,6 +461,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       #endif
       break;
+    case MAC:
+        WINDOWS_MODE = false;
+        break;
+    case WIN:
+        WINDOWS_MODE = true;
+        break;
   }
   return true;
 }
@@ -548,7 +557,7 @@ void render_status(struct CharacterMatrix *matrix) {
 
   // Render to mode icon
   static char logo[][2][3]={{{0x95,0x96,0},{0xb5,0xb6,0}},{{0x97,0x98,0},{0xb7,0xb8,0}}};
-  if(keymap_config.swap_lalt_lgui==false){
+  if(! WINDOWS_MODE){
     matrix_write(matrix, logo[0][0]);
     matrix_write_P(matrix, PSTR("\n"));
     matrix_write(matrix, logo[0][1]);
