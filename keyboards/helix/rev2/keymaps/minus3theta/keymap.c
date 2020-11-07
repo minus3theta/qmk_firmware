@@ -566,6 +566,19 @@ void render_status(struct CharacterMatrix *matrix) {
     matrix_write_P(matrix, PSTR("\n"));
     matrix_write(matrix, logo[1][1]);
   }
+  switch (default_layer_state) {
+    case 1<<_QWERTY:
+        matrix_write_P(matrix, PSTR(" Qwerty"));
+        break;
+    case 1<<_COLEMAK:
+        matrix_write_P(matrix, PSTR(" Colemak"));
+        break;
+    case 1<<_VOLTE:
+        matrix_write_P(matrix, PSTR(" Volte"));
+        break;
+    default:
+        break;
+  }
 
   // Define layers here, Have not worked out how to have text displayed for each layer. Copy down the number you see and add a case for it below
   char buf[40];
